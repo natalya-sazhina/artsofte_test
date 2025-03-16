@@ -10,6 +10,7 @@ use App\Api\V1\Entity\Request;
 use App\Api\V1\Repository\CarRepository;
 use App\Api\V1\Repository\CreditProgramRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -24,6 +25,13 @@ class PostController extends AbstractController
     ) {
     }
 
+    #[OA\Response(
+        response: 200,
+        description: 'Create credit request',
+        content: new OA\JsonContent(properties: [
+            new OA\Property(property: 'success', type: 'boolean')
+        ])
+    )]
     #[Route('/api/v1/request', name: 'create_request', methods: ['POST'])]
     public function __invoke(
         #[MapRequestPayload] PostControllerRequestBody $requestDto,

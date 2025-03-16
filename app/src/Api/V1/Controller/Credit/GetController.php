@@ -7,6 +7,8 @@ namespace App\Api\V1\Controller\Credit;
 use App\Api\V1\Dto\CreditDto;
 use App\Api\V1\Repository\CreditProgramRepository;
 use App\Api\V1\Service\CreditCalculatorService;
+use Nelmio\ApiDocBundle\Attribute\Model;
+use OpenApi\Attributes as OA;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,6 +24,13 @@ class GetController extends AbstractController
     ) {
     }
 
+    #[OA\Response(
+        response: 200,
+        description: 'Determine the credit program and monthly payment',
+        content: new OA\JsonContent(ref: new Model(type: GetControllerResponseBody::class))
+    )]
+    #[OA\Response(response: 400, description: 'Bad request')]
+    #[OA\Response(response: 404, description: 'Not found')]
     #[Route('/api/v1/credit/calculate', name: 'credit_calculate', methods: ['GET'])]
     public function calculate(
         #[MapQueryString] CreditDto $creditDto,
