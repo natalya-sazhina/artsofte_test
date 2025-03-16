@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  nginx:
+    build:
+      context: ./nginx
+    volumes:
+      - ../app:/artsofte
+    container_name: artsofte-nginx
+    restart: always
+    ports:
+      - "8081:80"
+
+  php-fpm:
+    build:
+      context: ./php-fpm
+    volumes:
+      - ../app:/artsofte
+    container_name: artsofte-php-fpm
+    depends_on:
+      - mariadb
+
+  mariadb:
+    image: mariadb:10.8
+    volumes:
+      - mariadb:/var/lib/mysql
+    container_name: artsofte-mariadb
+    restart: always
+    ports:
+        - 3306:3306
+    environment:
+      MARIADB_DATABASE: app
+      MARIADB_ROOT_PASSWORD: example
+
+volumes:
+  mariadb:
